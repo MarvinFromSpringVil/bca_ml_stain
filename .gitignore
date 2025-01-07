@@ -169,3 +169,11 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+*.jpeg
+*.jpg 
+*.JPG
+*.JPEG
+*.png 
+*.zip
+ML_Stain/
