@@ -8,7 +8,7 @@ import random
 from torch.utils.data import Dataset, DataLoader
 
 class DeepStainDataset(Dataset):
-    def __init__(self, root_dir, mode='dapi', transform=None):
+    def __init__(self, root_dir, mode='dapi', transforms=None):
         self.root_dir = root_dir
         self.transform = transform
 
