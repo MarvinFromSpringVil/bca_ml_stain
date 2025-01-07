@@ -19,7 +19,7 @@ class Unet(nn.Module):
         self.down3 = ConvPool(fch_base * 2, fch_base * 4, isBN)
         self.down4 = ConvPool(fch_base * 4, fch_base * 8, isBN)
         
-        self.encoder = ConvPool(fch_base * 8+1, fch_base * 16, isBN)
+        self.encoder = ConvPool(fch_base * 8, fch_base * 16, isBN)
         
         self.up1 = UpsampleConv(fch_base * 16, fch_base * 8, isDeconv, isBN)
         self.up2 = UpsampleConv(fch_base * 8, fch_base * 4, isDeconv, isBN)
@@ -37,11 +37,7 @@ class Unet(nn.Module):
         d2 = self.down2(d1)
         d3 = self.down3(d2)
         d4 = self.down4(d3)
-
-        #print(d4.shape) # 1 128 28 28 
-        d5 = torch.cat([d4, condition], dim=1)
-        #enc = self.encoder(d4)
-        enc = self.encoder(d5)
+        enc = self.encoder(d4)
         
         u1 = self.up1(enc, d4)
         u2 = self.up2(u1, d3)

@@ -10,6 +10,7 @@ def opt():
     parser = argparse.ArgumentParser() 
     parser.add_argument('--batch_size', type=int, default=18)
     parser.add_argument('--mile_stone', nargs="+", type=int)
+    parser.add_argument('--mode', type=str, default='dapi')
     parser.add_argument('--lr', type=float, default=0.01)
     parser.add_argument('--epochs', type=int, default=200)
     parser.add_argument('--test_every', type=int, default=50)
@@ -38,6 +39,7 @@ def main(args):
     # dataloader 
     dataloader = get_dataloader(
         root_dir=args.root_dir, 
+        mode=args.mode,
         transforms=TRANSFORMS, 
         batch_size=args.batch_size
     )
@@ -53,7 +55,7 @@ def main(args):
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr) 
 
     if args.mile_stone:
-        scheduler = torch.MultiStepLR(optimizer, milestones=args.mile_stone, gamma=0.1)
+        scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=args.mile_stone, gamma=0.1)
     else:
         scheduler = None 
 

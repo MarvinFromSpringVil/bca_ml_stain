@@ -8,17 +8,21 @@ import random
 from torch.utils.data import Dataset, DataLoader
 
 class DeepStainDataset(Dataset):
-    def __init__(self, root_dir, transform=None):
+    def __init__(self, root_dir, mode='dapi', transform=None):
         self.root_dir = root_dir
         self.transform = transform
 
         self.x_images = glob(os.path.join(os.path.join(root_dir, 'x'), '*.png'))
-        self.y1_images = glob(os.path.join(os.path.join(root_dir, 'y1'), '*.png'))
-        self.y2_images = glob(os.path.join(os.path.join(root_dir, 'y2'), '*.png'))
-        
-        assert len(self.x_images) == len(self.y1_images)
-        assert len(self.y1_images) == len(self.y2_images)
 
+        if mode == 'dapi':
+            self.y_images = glob(os.path.join(os.path.join(root_dir, 'y1'), '*.png'))
+        elif mode == 'lap2':
+            self.y_images = glob(os.path.join(os.path.join(root_dir, 'y2'), '*.png'))
+        else:
+            raise NotImplementedError('Unsupported mode: ', mode)
+
+        assert len(self.x_images) == len(self.y_images)
+    
         self.transform = transform
 
     def __len__(self):
@@ -26,12 +30,11 @@ class DeepStainDataset(Dataset):
 
     def __getitem__(self, idx):
         x = Image.open(self.x_images[idx])
+        y = Image.open(self.y_images[idx])
 
         if random.random() < 0.5: 
-            y = Image.open(self.y1_images[idx])
             z = torch.ones(1, 28, 28) 
         else:
-            y = Image.open(self.y2_images[idx])
             z = torch.zeros(1, 28, 28) 
 
         x = self.transform(x)
@@ -40,8 +43,8 @@ class DeepStainDataset(Dataset):
         sample = {'x': x, 'y': y, 'z': z}
         return sample
 
-def get_dataloader(root_dir, batch_size, transforms, shuffle=False):
-    dataset = DeepStainDataset(root_dir, transforms)
+def get_dataloader(root_dir, batch_size, mode, transforms, shuffle=False):
+    dataset = DeepStainDataset(root_dir, mode=mode, transforms=transforms)
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
     return dataloader
 
