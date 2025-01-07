@@ -29,10 +29,10 @@ class DeepStainDataset(Dataset):
 
         if random.random() < 0.5: 
             y = Image.open(self.y1_images[idx])
-            z = torch.ones(1, 1, 28, 28) 
+            z = torch.ones(1, 28, 28) 
         else:
             y = Image.open(self.y2_images[idx])
-            z = torch.zeros(1, 1, 28, 28) 
+            z = torch.zeros(1, 28, 28) 
 
         x = self.transform(x)
         y = self.transform(y)
