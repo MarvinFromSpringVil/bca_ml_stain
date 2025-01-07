@@ -49,10 +49,10 @@ def main(args):
     model = model.to(device)
 
     # loss function & optimizer 
-    #loss_fn = torch.nn.L1Loss()
-    loss_fn = torch.nn.MSELoss()
-    #optimizer = torch.optim.SGD(model.parameters(), lr=args.lr) 
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr) 
+    loss_fn = torch.nn.L1Loss()
+    #loss_fn = torch.nn.MSELoss()
+    optimizer = torch.optim.SGD(model.parameters(), lr=args.lr) 
+    #optimizer = torch.optim.Adam(model.parameters(), lr=args.lr) 
 
     if args.mile_stone:
         scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=args.mile_stone, gamma=0.1)

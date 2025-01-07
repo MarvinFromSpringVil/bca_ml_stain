@@ -10,7 +10,7 @@ from torch.utils.data import Dataset, DataLoader
 class DeepStainDataset(Dataset):
     def __init__(self, root_dir, mode='dapi', transforms=None):
         self.root_dir = root_dir
-        self.transform = transform
+        self.transform = transforms
 
         self.x_images = glob(os.path.join(os.path.join(root_dir, 'x'), '*.png'))
 
@@ -22,8 +22,6 @@ class DeepStainDataset(Dataset):
             raise NotImplementedError('Unsupported mode: ', mode)
 
         assert len(self.x_images) == len(self.y_images)
-    
-        self.transform = transform
 
     def __len__(self):
         return len(self.x_images)
