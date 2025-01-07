@@ -13,7 +13,7 @@ def opt():
     parser.add_argument('--lr', type=float, default=0.01)
     parser.add_argument('--epochs', type=int, default=200)
     parser.add_argument('--test_every', type=int, default=50)
-    parser.add_argument('--root_dir', type=str, default='./DeepStain')
+    parser.add_argument('--root_dir', type=str, default='./ML_Stain')
     parser.add_argument('--logdir', type=str, default='./log')
     return parser.parse_args() 
 
@@ -34,15 +34,14 @@ def main(args):
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
     ])
-    ROOT_DIR = args.root_dir
 
     # dataloader 
     dataloader = get_dataloader(
-        root_dir=ROOT_DIR, 
+        root_dir=args.root_dir, 
         transforms=TRANSFORMS, 
-        batch_size=16
+        batch_size=args.batch_size
     )
-
+    
     # model 
     model = get_model() 
     model = model.to(device)
